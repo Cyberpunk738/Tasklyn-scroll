@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Jobs | Tasklyn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .jobs-container {
+            padding: 8rem 0 4rem;
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .search-bar {
+            flex: 1;
+            padding: 0.8rem 1.5rem;
+            border-radius: 999px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: white;
+            min-width: 300px;
+        }
+
+        .job-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .job-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .job-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .price-tag {
+            font-weight: 700;
+            color: var(--success-color);
+            font-size: 1.2rem;
+            text-align: right;
+        }
+
+        @media(max-width: 768px) {
+            .job-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .price-tag {
+                text-align: left;
+                margin-bottom: 0.5rem;
+            }
+
+            .btn-outline {
+                width: 100%;
+            }
+
+            div[style*="text-align: right"] {
+                width: 100%;
+                text-align: left !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="assets/task.png" alt="Tasklyn Logo" class="logo-img">
+            </a>
+
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <!-- Buying Mode -->
+                <a href="gigs.html" class="nav-link mode-buy">Find Talent</a>
+                <a href="create-job.html" class="nav-link mode-buy">Post Job</a>
+                <!-- Selling Mode -->
+                <a href="jobs.html" class="nav-link mode-sell active-link" style="display:none">Find Work</a>
+                <a href="create-gig.html" class="nav-link mode-sell" style="display:none">Create Gig</a>
+
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+            </div>
+
+            <div class="nav-actions">
+                <button class="mode-switch" id="mode-btn">Switch to Selling</button>
+                <button id="connect-wallet">Connect Wallet</button>
+                <div class="nav-toggle" id="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Nav Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navToggle = document.getElementById('nav-toggle');
+            const navMenu = document.getElementById('nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navMenu.classList.toggle('show');
+                    navToggle.classList.toggle('active');
+                });
+            }
+
+            const modeBtn = document.getElementById('mode-btn');
+            const buyLinks = document.querySelectorAll('.mode-buy');
+            const sellLinks = document.querySelectorAll('.mode-sell');
+            let isSelling = localStorage.getItem('tasklyn_mode') === 'selling';
+
+            function updateMode() {
+                if (isSelling) {
+                    buyLinks.forEach(l => l.style.display = 'none');
+                    sellLinks.forEach(l => l.style.display = 'block');
+                    modeBtn.textContent = 'Switch to Buying';
+                    modeBtn.style.color = 'var(--primary)';
+                } else {
+                    buyLinks.forEach(l => l.style.display = 'block');
+                    sellLinks.forEach(l => l.style.display = 'none');
+                    modeBtn.textContent = 'Switch to Selling';
+                    modeBtn.style.color = 'var(--success-color)';
+                }
+                localStorage.setItem('tasklyn_mode', isSelling ? 'selling' : 'buying');
+            }
+
+            if (modeBtn) {
+                modeBtn.addEventListener('click', () => {
+                    isSelling = !isSelling;
+                    updateMode();
+                });
+                updateMode();
+            }
+        });
+    </script>
+
+    <div class="container jobs-container">
+        <h1 class="section-title" style="text-align: left; margin-bottom: 1rem;">Available Tasks</h1>
+        <p style="color: var(--text-secondary); margin-bottom: 3rem;">Browse open bounties and micro-tasks.</p>
+
+        <div class="filters">
+            <input type="text" class="search-bar" placeholder="Search for jobs (e.g. Design, Audit, Content)...">
+            <select class="search-bar" style="flex: 0; min-width: 150px;">
+                <option>All Categories</option>
+                <option>Development</option>
+                <option>Design</option>
+                <option>Writing</option>
+            </select>
+        </div>
+
+        <div id="jobs-list">
+            <div style="text-align: center; padding: 3rem; color: #666;">Loading...</div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.1/ethers.umd.min.js"></script>
+    <script src="js/web3.js"></script>
+    <script src="js/store.js"></script>
+    <script>
+        const MOCK_JOBS = [
+            { id: 1, title: "Smart Contract Audit for DeFi Protocol", description: "Review our staking contracts.", reward: "2.5 ETH", tags: ["Solidity", "Security"], client: "0x12...89AB" },
+            { id: 2, title: "Responsive Landing Page Design", description: "Create a modern landing page in Figma.", reward: "500 USDC", tags: ["Design", "Figma"], client: "0x45...CDEF" },
+            { id: 3, title: "Technical Writer for API Docs", description: "Write clear examples for our SDK.", reward: "0.8 ETH", tags: ["Writing", "Docs"], client: "0x78...0123" }
+        ];
+
+        function loadJobs() {
+            const listContainer = document.getElementById('jobs-list');
+            const localJobs = Store.getJobs(); // Using Store
+            const allJobs = [...localJobs, ...MOCK_JOBS];
+
+            if (allJobs.length === 0) listContainer.innerHTML = "No jobs found.";
+            else {
+                listContainer.innerHTML = allJobs.map(job => `
+                    <div class="job-card">
+                        <div class="job-info">
+                            <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">${job.title}</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; max-width: 600px;">${job.description.substring(0, 100)}...</p>
+                            <div class="job-tags">
+                                <span class="tag">Scroll</span>
+                                ${job.tags ? job.tags.map(t => `<span class="tag">${t}</span>`).join('') : ''}
+                            </div>
+                        </div>
+                        <div style="text-align: right; min-width: 120px;">
+                            <div class="price-tag">${job.reward}</div>
+                            <button class="btn btn-outline" style="margin-top: 0.8rem; font-size: 0.85rem; padding: 0.6rem 1.2rem;" onclick="window.location.href='job-details.html?id=${job.id}'">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+        window.addEventListener('load', loadJobs);
+    </script>
+</body>
+
+</html>

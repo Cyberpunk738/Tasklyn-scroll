@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Tasklyn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .dashboard-container {
+            padding: 8rem 0 4rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            text-align: center;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .list-section {
+            display: none;
+        }
+
+        .list-section.active {
+            display: block;
+        }
+
+        .item-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 0.8rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Auth Guard -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const account = localStorage.getItem('connectedAccount');
+            if (!account) {
+                alert("Please login with your wallet to access the dashboard.");
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="assets/task.png" alt="Tasklyn Logo" class="logo-img">
+            </a>
+
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <!-- Buying Mode -->
+                <a href="gigs.html" class="nav-link mode-buy">Find Talent</a>
+                <a href="create-job.html" class="nav-link mode-buy">Post Job</a>
+                <!-- Selling Mode -->
+                <a href="jobs.html" class="nav-link mode-sell" style="display:none">Find Work</a>
+                <a href="create-gig.html" class="nav-link mode-sell" style="display:none">Create Gig</a>
+
+                <a href="dashboard.html" class="nav-link active-link">Dashboard</a>
+            </div>
+
+            <div class="nav-actions">
+                <button class="mode-switch" id="mode-btn">Switch to Selling</button>
+                <button id="connect-wallet">Connect Wallet</button>
+                <div class="nav-toggle" id="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Nav Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navToggle = document.getElementById('nav-toggle');
+            const navMenu = document.getElementById('nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navMenu.classList.toggle('show');
+                    navToggle.classList.toggle('active');
+                });
+            }
+            const modeBtn = document.getElementById('mode-btn');
+            const buyLinks = document.querySelectorAll('.mode-buy');
+            const sellLinks = document.querySelectorAll('.mode-sell');
+            let isSelling = localStorage.getItem('tasklyn_mode') === 'selling';
+            function updateMode() {
+                if (isSelling) {
+                    buyLinks.forEach(l => l.style.display = 'none');
+                    sellLinks.forEach(l => l.style.display = 'block');
+                    modeBtn.textContent = 'Switch to Buying';
+                    modeBtn.style.color = 'var(--primary)';
+                } else {
+                    buyLinks.forEach(l => l.style.display = 'block');
+                    sellLinks.forEach(l => l.style.display = 'none');
+                    modeBtn.textContent = 'Switch to Selling';
+                    modeBtn.style.color = 'var(--success-color)';
+                }
+                localStorage.setItem('tasklyn_mode', isSelling ? 'selling' : 'buying');
+            }
+            if (modeBtn) {
+                modeBtn.addEventListener('click', () => { isSelling = !isSelling; updateMode(); });
+                updateMode();
+            }
+        });
+    </script>
+
+    <div class="container dashboard-container">
+        <h1 style="margin-bottom: 0.5rem;">Dashboard</h1>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem;">Welcome back, <span id="user-addr">...</span></p>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div style="font-size: 2rem; font-weight: 700; color: var(--primary);" id="total-earned">0.00 ETH</div>
+                <div style="font-size: 0.9rem; color: var(--text-secondary);">Total Earned</div>
+            </div>
+            <div class="stat-card">
+                <div style="font-size: 2rem; font-weight: 700; color: white;" id="active-jobs">0</div>
+                <div style="font-size: 0.9rem; color: var(--text-secondary);">Active Jobs</div>
+            </div>
+            <div class="stat-card">
+                <div style="font-size: 2rem; font-weight: 700; color: white;" id="completed-jobs">0</div>
+                <div style="font-size: 0.9rem; color: var(--text-secondary);">Completed</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('client')">Client Mode</button>
+            <button class="tab-btn" onclick="switchTab('freelancer')">Freelancer Mode</button>
+        </div>
+
+        <div id="client-view" class="list-section active">
+            <h3 style="margin-bottom: 1.5rem;">Posted Jobs</h3>
+            <div id="posted-jobs-list">Loading...</div>
+            <h3 style="margin-top: 3rem; margin-bottom: 1.5rem;">Gig Orders</h3>
+            <div id="gig-orders-list">Loading...</div>
+        </div>
+
+        <div id="freelancer-view" class="list-section">
+            <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+                <h3>My Gigs (Selling)</h3>
+                <button class="btn btn-outline" onclick="window.location.href='create-gig.html'">+ Create Gig</button>
+            </div>
+            <div id="my-gigs-list">Loading...</div>
+            <h3 style="margin-top: 3rem; margin-bottom: 1.5rem;">Active Jobs (To Do)</h3>
+            <div id="todo-list">Loading...</div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.1/ethers.umd.min.js"></script>
+    <script src="js/web3.js"></script>
+    <script src="js/store.js"></script>
+    <script>
+        let currentUser = null;
+        function renderDashboard() {
+            currentUser = localStorage.getItem('connectedAccount');
+            if (!currentUser) {
+                document.querySelector('.dashboard-container').innerHTML = `<div style="text-align:center;"><h2>Please verify wallet connection</h2></div>`;
+                return;
+            }
+            document.getElementById('user-addr').textContent = currentUser.substring(0, 6) + '...';
+
+            const allJobs = Store.getJobs();
+            const myPostedJobs = allJobs.filter(j => j.client && j.client.toLowerCase() === currentUser.toLowerCase());
+
+            const postedContainer = document.getElementById('posted-jobs-list');
+            if (myPostedJobs.length === 0) postedContainer.innerHTML = '<p style="color:#666">No jobs posted.</p>';
+            else {
+                postedContainer.innerHTML = myPostedJobs.map(j => `
+                    <div class="item-card">
+                        <div>
+                            <strong>${j.title}</strong>
+                            <div style="font-size:0.8rem; margin-top:0.4rem;">
+                                Status: ${j.status} | Bids: ${j.bids ? j.bids.length : 0}
+                            </div>
+                        </div>
+                        <div>
+                            ${j.submission ?
+                        `<button class="btn btn-primary" onclick="releasePayment('${j.id}')">Release Payment</button>` :
+                        `<button class="btn btn-outline" onclick="window.location.href='job-details.html?id=${j.id}'">Manage</button>`
+                    }
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            const activeJobs = allJobs.filter(j => j.freelancer === currentUser);
+            const todoContainer = document.getElementById('todo-list');
+            if (activeJobs.length === 0) todoContainer.innerHTML = '<p style="color:#666">No active jobs.</p>';
+            else {
+                todoContainer.innerHTML = activeJobs.map(j => `
+                    <div class="item-card">
+                         <div>
+                            <strong>${j.title}</strong>
+                            <div style="font-size:0.8rem; margin-top:0.4rem;">Price: ${j.agreedPrice}</div>
+                        </div>
+                        <div>
+                             ${j.status === 'REVIEW' ?
+                        `<span class="feature-badge">Under Review</span>` :
+                        `<button class="btn btn-primary" onclick="submitWork('${j.id}')">Submit Work</button>`
+                    }
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            const allGigs = Store.getGigs();
+            const myGigs = allGigs.filter(g => g.freelancer === currentUser);
+            const gigsContainer = document.getElementById('my-gigs-list');
+            if (myGigs.length === 0) gigsContainer.innerHTML = '<p style="color:#666">You have no gigs.</p>';
+            else {
+                gigsContainer.innerHTML = myGigs.map(g => `
+                    <div class="item-card">
+                         <div><strong>${g.title}</strong> - ${g.price}</div>
+                         <span class="feature-badge">Active</span>
+                    </div>
+                `).join('');
+            }
+            document.getElementById('active-jobs').textContent = activeJobs.length;
+        }
+
+        window.submitWork = (id) => {
+            const ipfs = prompt("Enter IPFS/File Link for submission:");
+            if (ipfs) { Store.submitWork(id, ipfs); alert("Work submitted! Client will review."); renderDashboard(); }
+        };
+        window.releasePayment = (id) => {
+            if (confirm("Approve work and release funds?")) { Store.releasePayment(id); alert("Bounty Paid! Transaction confirmed on Scroll."); renderDashboard(); }
+        };
+        window.switchTab = (tab) => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.list-section').forEach(s => s.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tab + '-view').classList.add('active');
+        };
+        window.addEventListener('load', renderDashboard);
+    </script>
+</body>
+
+</html>

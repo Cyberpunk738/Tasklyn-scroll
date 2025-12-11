@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tasklyn - Multi-Chain Job Platform | Web3 Future of Work</title>
+    <meta name="description" content="Tasklyn is the premier multi-chain job platform, seamlessly connecting employers and workers on Base and Solana with secure escrow and smart contracts." />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <img src="task.png" alt="Tasklyn Logo" class="logo-img" />
+          <span class="logo-text"></span>
+        </div>
+        
+        <div class="nav-menu" id="nav-menu">
+          <a href="#hero" class="nav-link">Home</a>
+          <a href="#features" class="nav-link">Features</a>
+          <a href="#how-it-works" class="nav-link">How It Works</a>
+          <a href="#blockchain" class="nav-link">Blockchain</a>
+          <a href="#cta" class="nav-link">Contact</a>
+        </div>
+
+        <div class="nav-actions">
+          <button class="btn btn-outline">
+            <i class="fas fa-wallet"></i>
+            Connect Wallet
+          </button>
+          <button class="btn btn-primary">
+            <i class="fas fa-plus"></i>
+            Post a Job
+          </button>
+        </div>
+
+        <div class="nav-toggle" id="nav-toggle">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+      <div class="hero-background">
+        <div class="hero-grid"></div>
+        <div class="hero-glow"></div>
+      </div>
+      
+      <div class="hero-container">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <i class="fas fa-link"></i>
+            Multi-Chain Platform
+          </div>
+          
+          <h1 class="hero-title">
+            The Future of Work is
+            <span class="gradient-text">Decentralized</span>
+          </h1>
+          
+          <p class="hero-subtitle">
+            Tasklyn revolutionizes job markets across Base and Solana with smart contracts, 
+            secure escrow, and seamless cross-chain collaboration.
+          </p>
+          
+          <div class="hero-stats">
+            <div class="stat-item">
+              <span class="stat-number">2</span>
+              <span class="stat-label">Blockchains</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">∞</span>
+              <span class="stat-label">Possibilities</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">100%</span>
+              <span class="stat-label">Secure</span>
+            </div>
+          </div>
+          
+          <div class="hero-actions">
+            <button onclick="location.href='#cta'" class="btn btn-primary btn-large">
+              <i class="fas fa-rocket"></i>
+              Join Waitlist
+            </button>
+            <button class="btn btn-outline btn-large">
+              <i class="fas fa-play"></i>
+              Watch Demo
+            </button>
+          </div>
+        </div>
+        
+        <div class="hero-visual">
+          <div class="blockchain-visual">
+            <div class="chain-item base">
+              <i class="fas fa-cube"></i>
+              <span>Base</span>
+            </div>
+            <div class="chain-bridge">
+              <div class="bridge-line"></div>
+              <i class="fas fa-exchange-alt"></i>
+            </div>
+            <div class="chain-item solana">
+              <i class="fas fa-bolt"></i>
+              <span>Solana</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Powered by Web3 Innovation</h2>
+          <p class="section-subtitle">Experience the next generation of job platforms with blockchain technology</p>
+        </div>
+        
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3>Smart Contract Escrow</h3>
+            <p>Automated payment release upon milestone completion with immutable smart contracts</p>
+            <div class="feature-badge">Base + Solana</div>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-network-wired"></i>
+            </div>
+            <h3>Cross-Chain Integration</h3>
+            <p>Seamlessly work across multiple blockchains with unified interface</p>
+            <div class="feature-badge">Multi-Chain</div>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <h3>Reputation System</h3>
+            <p>On-chain reputation tracking ensures quality and trust in the ecosystem</p>
+            <div class="feature-badge">Trustless</div>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-coins"></i>
+            </div>
+            <h3>Stablecoin Payments</h3>
+            <p>Receive payments in USDC, USDT, and other stablecoins for price stability</p>
+            <div class="feature-badge">Stable</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">How Tasklyn Works</h2>
+          <p class="section-subtitle">Simple, secure, and efficient workflow powered by blockchain</p>
+        </div>
+        
+        <div class="workflow">
+          <div class="workflow-step">
+            <div class="step-number">01</div>
+            <div class="step-icon">
+              <i class="fas fa-user-plus"></i>
+            </div>
+            <h3>Connect Wallet</h3>
+            <p>Connect your Web3 wallet to access the platform</p>
+          </div>
+          
+          <div class="workflow-arrow">
+            <i class="fas fa-arrow-right"></i>
+          </div>
+          
+          <div class="workflow-step">
+            <div class="step-number">02</div>
+            <div class="step-icon">
+              <i class="fas fa-search"></i>
+            </div>
+            <h3>Find Opportunities</h3>
+            <p>Browse jobs or post new opportunities</p>
+          </div>
+          
+          <div class="workflow-arrow">
+            <i class="fas fa-arrow-right"></i>
+          </div>
+          
+          <div class="workflow-step">
+            <div class="step-number">03</div>
+            <div class="step-icon">
+              <i class="fas fa-handshake"></i>
+            </div>
+            <h3>Agree & Execute</h3>
+            <p>Set milestones and start working</p>
+          </div>
+          
+          <div class="workflow-arrow">
+            <i class="fas fa-arrow-right"></i>
+          </div>
+          
+          <div class="workflow-step">
+            <div class="step-number">04</div>
+            <div class="step-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Get Paid</h3>
+            <p>Automatic payment release upon completion</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Blockchain Section -->
+    <section id="blockchain" class="blockchain">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Built on Proven Blockchains</h2>
+          <p class="section-subtitle">Leveraging the best of both worlds for optimal performance and security</p>
+        </div>
+        
+        <div class="blockchain-cards">
+          <div class="blockchain-card base">
+            <div class="chain-header">
+              <div class="chain-logo">
+                <i class="fas fa-cube"></i>
+              </div>
+              <h3>Base Network</h3>
+              <span class="chain-tag">Layer 2</span>
+            </div>
+            <ul class="chain-features">
+              <li><i class="fas fa-check"></i> Low gas fees</li>
+              <li><i class="fas fa-check"></i> Ethereum security</li>
+              <li><i class="fas fa-check"></i> Fast transactions</li>
+            </ul>
+          </div>
+          
+          <div class="blockchain-card solana">
+            <div class="chain-header">
+              <div class="chain-logo">
+                <i class="fas fa-bolt"></i>
+              </div>
+              <h3>Solana</h3>
+              <span class="chain-tag">High Performance</span>
+            </div>
+            <ul class="chain-features">
+              <li><i class="fas fa-check"></i> Ultra-fast</li>
+              <li><i class="fas fa-check"></i> Low cost</li>
+              <li><i class="fas fa-check"></i> Scalable</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="cta" >
+      <div class="container">
+        <div class="cta-content">
+          <h2>Ready to Shape the Future of Work?</h2>
+          <p>Join thousands of professionals already using Tasklyn to build, earn, and grow in the Web3 economy.</p>
+          
+          <div class="cta-form">
+            <div class="form-group">
+              <input type="email" placeholder="Enter your email address" class="form-input" />
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i>
+                Join Waitlist
+              </button>
+            </div>
+            <p class="form-note">Get early access and exclusive updates</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-brand">
+            <div class="logo-section">
+              <img src="task.png" alt="Tasklyn" class="footer-logo" />
+              <span class="logo-text">Tasklyn</span>
+            </div>
+            <p>Building the future of decentralized work with secure, transparent, and efficient blockchain technology.</p>
+            <div class="social-links">
+              <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="social-link" aria-label="Discord"><i class="fab fa-discord"></i></a>
+              <a href="#" class="social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
+              <a href="#" class="social-link" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+            </div>
+          </div>
+          
+          <div class="footer-links">
+            <div class="footer-column">
+              <h4>Platform</h4>
+              <a href="#features">Features</a>
+              <a href="#how-it-works">How it Works</a>
+              <a href="#blockchain">Blockchain</a>
+              <a href="#">Security</a>
+              <a href="#">API</a>
+            </div>
+            
+            <div class="footer-column">
+              <h4>Company</h4>
+              <a href="#">About Us</a>
+              <a href="#">Blog</a>
+              <a href="#">Careers</a>
+              <a href="#">Press</a>
+              <a href="#">Partners</a>
+            </div>
+            
+            <div class="footer-column">
+              <h4>Support</h4>
+              <a href="#">Help Center</a>
+              <a href="#">Documentation</a>
+              <a href="#">Contact</a>
+              <a href="#">Status</a>
+              <a href="#">Community</a>
+            </div>
+            
+            <div class="footer-column">
+              <h4>Legal</h4>
+              <a href="#">Privacy Policy</a>
+              <a href="#">Terms of Service</a>
+              <a href="#">Cookie Policy</a>
+              <a href="#">GDPR</a>
+              <a href="#">Security</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="footer-bottom">
+          <p>&copy; 2025 Tasklyn. All rights reserved.</p>
+          <div class="footer-bottom-links">
+            <span>Built with love for the Web3 community</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

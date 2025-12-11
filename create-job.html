@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post a Job | Tasklyn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .form-container {
+            max-width: 700px;
+            margin: 8rem auto 4rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 1rem;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .col {
+            flex: 1;
+        }
+
+        .file-upload {
+            border: 2px dashed var(--border-color);
+            padding: 2rem;
+            text-align: center;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .file-upload i {
+            font-size: 2rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Auth Guard -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const account = localStorage.getItem('connectedAccount');
+            if (!account) {
+                alert("Please login with your wallet to post a job.");
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="assets/task.png" alt="Tasklyn Logo" class="logo-img">
+            </a>
+
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <!-- Buying Mode -->
+                <a href="gigs.html" class="nav-link mode-buy">Find Talent</a>
+                <a href="create-job.html" class="nav-link mode-buy active-link">Post Job</a>
+                <!-- Selling Mode -->
+                <a href="jobs.html" class="nav-link mode-sell" style="display:none">Find Work</a>
+                <a href="create-gig.html" class="nav-link mode-sell" style="display:none">Create Gig</a>
+
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+            </div>
+
+            <div class="nav-actions">
+                <button class="mode-switch" id="mode-btn">Switch to Selling</button>
+                <button id="connect-wallet">Connect Wallet</button>
+                <div class="nav-toggle" id="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Nav Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navToggle = document.getElementById('nav-toggle');
+            const navMenu = document.getElementById('nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navMenu.classList.toggle('show');
+                    navToggle.classList.toggle('active');
+                });
+            }
+            const modeBtn = document.getElementById('mode-btn');
+            const buyLinks = document.querySelectorAll('.mode-buy');
+            const sellLinks = document.querySelectorAll('.mode-sell');
+            let isSelling = localStorage.getItem('tasklyn_mode') === 'selling';
+            function updateMode() {
+                if (isSelling) {
+                    buyLinks.forEach(l => l.style.display = 'none');
+                    sellLinks.forEach(l => l.style.display = 'block');
+                    modeBtn.textContent = 'Switch to Buying';
+                    modeBtn.style.color = 'var(--primary)';
+                } else {
+                    buyLinks.forEach(l => l.style.display = 'block');
+                    sellLinks.forEach(l => l.style.display = 'none');
+                    modeBtn.textContent = 'Switch to Selling';
+                    modeBtn.style.color = 'var(--success-color)';
+                }
+                localStorage.setItem('tasklyn_mode', isSelling ? 'selling' : 'buying');
+            }
+            if (modeBtn) {
+                modeBtn.addEventListener('click', () => { isSelling = !isSelling; updateMode(); });
+                updateMode();
+            }
+        });
+    </script>
+
+    <div class="container form-container glass-panel">
+        <h1 style="margin-bottom: 2rem; text-align: center;">Post a New Bounty</h1>
+
+        <form id="create-job-form">
+            <div class="form-group">
+                <label for="title">Job Title</label>
+                <input type="text" id="title" placeholder="e.g. Smart Contract Audit for DeFi Protocol" required>
+            </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category">
+                    <option value="Development">Development</option>
+                    <option value="Design">Design</option>
+                    <option value="Writing">Writing</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Audit">Smart Contract Audit</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" rows="5" placeholder="Describe the task requirements in detail..."
+                    required></textarea>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="budget">Budget (ETH/USDC)</label>
+                        <input type="text" id="budget" placeholder="e.g. 1.5 ETH" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="deadline">Deadline</label>
+                        <input type="date" id="deadline" required>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Reference File (Optional)</label>
+                <div class="file-upload" onclick="document.getElementById('file').click()">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <p>Click to upload specs or mockups (IPFS)</p>
+                    <span id="file-name" style="font-size: 0.8rem; color: var(--primary);"></span>
+                </div>
+                <input type="file" id="file" hidden>
+            </div>
+            <div class="actions" style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <button type="button" class="btn btn-outline" onclick="window.location.href='index.html'"
+                    style="flex: 1;">Cancel</button>
+                <button type="submit" class="btn btn-primary" style="flex: 2;">Post Job on Scroll</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.1/ethers.umd.min.js"></script>
+    <script src="js/web3.js"></script>
+    <script src="js/store.js"></script>
+    <script>
+        const form = document.getElementById('create-job-form');
+        const fileInput = document.getElementById('file');
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files[0]) document.getElementById('file-name').textContent = e.target.files[0].name;
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const account = localStorage.getItem('connectedAccount');
+            if (!account) { alert('Please connect your wallet first!'); return; }
+
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.textContent = 'Awaiting Wallet Signature...';
+            submitBtn.disabled = true;
+
+            try {
+                // 1. Trigger Signature to mimic Smart Contract Interaction
+                const msg = `Create Job: ${document.getElementById('title').value}\nReward: ${document.getElementById('budget').value}\nNonce: ${Date.now()}`;
+                await window.ethereum.request({
+                    method: 'personal_sign',
+                    params: [msg, account]
+                });
+
+                // 2. Proceed with "On-Chain" creation (Simulated)
+                submitBtn.textContent = 'Minting Job on Scroll...';
+
+                const ipfsHash = fileInput.files[0] ? 'QmHash' + Math.random().toString(36).substr(2, 9) : null;
+                const jobData = {
+                    title: document.getElementById('title').value,
+                    category: document.getElementById('category').value,
+                    description: document.getElementById('description').value,
+                    reward: document.getElementById('budget').value,
+                    deadline: document.getElementById('deadline').value,
+                    ipfsParams: ipfsHash,
+                    tags: [document.getElementById('category').value, 'Scroll']
+                };
+
+                setTimeout(() => {
+                    Store.createJob(jobData);
+                    alert('Transaction Confirmed! Job Posted on Scroll Network.');
+                    window.location.href = 'jobs.html';
+                }, 1000);
+
+            } catch (err) {
+                console.error(err);
+                alert("Transaction Rejected");
+                submitBtn.textContent = 'Post Job on Scroll';
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>

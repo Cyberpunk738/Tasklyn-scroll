@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gig Details | Tasklyn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .details-container {
+            padding: 8rem 0 4rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+        }
+
+        .main-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 2rem;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 6rem;
+        }
+
+        .order-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.5rem;
+        }
+
+        .gig-price-large {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .feature-list li {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .details-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="assets/task.png" alt="Tasklyn Logo" class="logo-img">
+            </a>
+
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <!-- Buying Mode -->
+                <a href="gigs.html" class="nav-link mode-buy">Find Talent</a>
+                <a href="create-job.html" class="nav-link mode-buy">Post Job</a>
+                <!-- Selling Mode -->
+                <a href="jobs.html" class="nav-link mode-sell" style="display:none">Find Work</a>
+                <a href="create-gig.html" class="nav-link mode-sell" style="display:none">Create Gig</a>
+
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+            </div>
+
+            <div class="nav-actions">
+                <button class="mode-switch" id="mode-btn">Switch to Selling</button>
+                <button id="connect-wallet">Connect Wallet</button>
+                <div class="nav-toggle" id="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Nav Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navToggle = document.getElementById('nav-toggle');
+            const navMenu = document.getElementById('nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navMenu.classList.toggle('show');
+                    navToggle.classList.toggle('active');
+                });
+            }
+            const modeBtn = document.getElementById('mode-btn');
+            const buyLinks = document.querySelectorAll('.mode-buy');
+            const sellLinks = document.querySelectorAll('.mode-sell');
+            let isSelling = localStorage.getItem('tasklyn_mode') === 'selling';
+            function updateMode() {
+                if (isSelling) {
+                    buyLinks.forEach(l => l.style.display = 'none');
+                    sellLinks.forEach(l => l.style.display = 'block');
+                    modeBtn.textContent = 'Switch to Buying';
+                    modeBtn.style.color = 'var(--primary)';
+                } else {
+                    buyLinks.forEach(l => l.style.display = 'block');
+                    sellLinks.forEach(l => l.style.display = 'none');
+                    modeBtn.textContent = 'Switch to Selling';
+                    modeBtn.style.color = 'var(--success-color)';
+                }
+                localStorage.setItem('tasklyn_mode', isSelling ? 'selling' : 'buying');
+            }
+            if (modeBtn) {
+                modeBtn.addEventListener('click', () => { isSelling = !isSelling; updateMode(); });
+                updateMode();
+            }
+        });
+    </script>
+
+    <div class="container details-container">
+        <!-- Main Content -->
+        <div class="main-content">
+            <h1 id="gig-title" style="margin-bottom: 1rem; font-size: 1.8rem;">Loading...</h1>
+            <div
+                style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+                <div
+                    style="width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <div>
+                    <strong id="freelancer-name">...</strong>
+                    <div style="font-size: 0.9rem; color: var(--text-secondary);">Level 2 Seller | 98% Success</div>
+                </div>
+            </div>
+            <div
+                style="background: #222; height: 300px; display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; border-radius: 0.5rem; color: #555;">
+                <i class="fa-solid fa-image fa-3x"></i>
+            </div>
+            <h3>About This Gig</h3>
+            <p style="color: var(--text-secondary); line-height: 1.6; margin-top: 1rem;">
+                I will provide high-quality service for your Web3 project using the Scroll Network.
+                Whether you need smart contracts, frontend design, or auditing, I have the experience to deliver.
+                <br><br>
+                <strong>What you get:</strong>
+                <br>- Professional communication
+                <br>- Fast delivery
+                <br>- 100% Satisfaction
+            </p>
+        </div>
+
+        <!-- Sidebar / Order Card -->
+        <div class="sidebar">
+            <div class="order-card">
+                <div class="gig-price-large" id="gig-price">...</div>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    Single Package: Includes source code and 3 revisions.
+                </p>
+                <ul class="feature-list" style="margin-bottom: 1.5rem;">
+                    <li><i class="fa-solid fa-clock" style="color: var(--primary);"></i> 3 Days Delivery</li>
+                    <li><i class="fa-solid fa-rotate" style="color: var(--primary);"></i> 3 Revisions</li>
+                    <li><i class="fa-solid fa-check" style="color: var(--primary);"></i> Source Code</li>
+                </ul>
+                <button id="order-btn" class="btn btn-primary" style="width: 100%;">
+                    Continue (<span id="btn-price">...</span>)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.1/ethers.umd.min.js"></script>
+    <script src="js/web3.js"></script>
+    <script src="js/store.js"></script>
+    <script>
+        const MOCK_GIGS = [{ id: 'mock1', title: "I will audit your Smart Contract", freelancer: "0xFreelancer1", price: "0.5 ETH" }, { id: 'mock2', title: "I will design a Web3 Landing Page", freelancer: "0xFreelancer2", price: "200 USDC" }, { id: 'mock3', title: "I will create a 3D NFT Character", freelancer: "0xFreelancer3", price: "0.2 ETH" }];
+        window.addEventListener('load', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const gigId = urlParams.get('id');
+            let gig = Store.getGigById(gigId);
+            if (!gig) { gig = MOCK_GIGS.find(g => g.id === gigId); }
+            if (!gig) { document.querySelector('.main-content').innerHTML = '<h2>Gig not found</h2>'; return; }
+
+            document.getElementById('gig-title').textContent = gig.title;
+            document.getElementById('freelancer-name').textContent = gig.freelancer;
+            document.getElementById('gig-price').textContent = gig.price;
+            document.getElementById('btn-price').textContent = gig.price;
+
+            document.getElementById('order-btn').addEventListener('click', async () => {
+                const account = localStorage.getItem('connectedAccount');
+                if (!account) { alert('Please connect wallet first!'); return; }
+                if (confirm(`Confirm order for ${gig.price} on Scroll Network?`)) {
+                    document.getElementById('order-btn').textContent = 'Processing...';
+                    setTimeout(() => {
+                        Store.createOrder(gig.id, { price: gig.price, title: gig.title, freelancer: gig.freelancer });
+                        alert('Order Placed Successfully! Funds are in escrow.');
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

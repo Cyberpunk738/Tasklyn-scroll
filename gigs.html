@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Gigs | Tasklyn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .gigs-container {
+            padding: 8rem 0 4rem;
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .search-bar {
+            flex: 1;
+            padding: 0.8rem 1.5rem;
+            border-radius: 999px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: white;
+            min-width: 300px;
+        }
+
+        /* Fix for invisible dropdown options */
+        .search-bar option {
+            background: #1a1a1a;
+            /* Dark background matching theme */
+            color: white;
+            padding: 10px;
+        }
+
+        .gigs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .gig-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            overflow: hidden;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gig-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+        }
+
+        .gig-image {
+            height: 180px;
+            background: #2a2a2a;
+            width: 100%;
+            object-fit: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+        }
+
+        .gig-content {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gig-user {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .gig-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .gig-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 1rem;
+        }
+
+        .gig-price {
+            font-weight: 700;
+            color: var(--success-color);
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="assets/task.png" alt="Tasklyn Logo" class="logo-img">
+            </a>
+
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <!-- Buying Mode -->
+                <a href="gigs.html" class="nav-link mode-buy active-link">Find Talent</a>
+                <a href="create-job.html" class="nav-link mode-buy">Post Job</a>
+                <!-- Selling Mode -->
+                <a href="jobs.html" class="nav-link mode-sell" style="display:none">Find Work</a>
+                <a href="create-gig.html" class="nav-link mode-sell" style="display:none">Create Gig</a>
+
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+            </div>
+
+            <div class="nav-actions">
+                <button class="mode-switch" id="mode-btn">Switch to Selling</button>
+                <button id="connect-wallet">Connect Wallet</button>
+                <div class="nav-toggle" id="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Nav Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navToggle = document.getElementById('nav-toggle');
+            const navMenu = document.getElementById('nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navMenu.classList.toggle('show');
+                    navToggle.classList.toggle('active');
+                });
+            }
+
+            const modeBtn = document.getElementById('mode-btn');
+            const buyLinks = document.querySelectorAll('.mode-buy');
+            const sellLinks = document.querySelectorAll('.mode-sell');
+            let isSelling = localStorage.getItem('tasklyn_mode') === 'selling';
+
+            function updateMode() {
+                if (isSelling) {
+                    buyLinks.forEach(l => l.style.display = 'none');
+                    sellLinks.forEach(l => l.style.display = 'block');
+                    modeBtn.textContent = 'Switch to Buying';
+                    modeBtn.style.color = 'var(--primary)';
+                } else {
+                    buyLinks.forEach(l => l.style.display = 'block');
+                    sellLinks.forEach(l => l.style.display = 'none');
+                    modeBtn.textContent = 'Switch to Selling';
+                    modeBtn.style.color = 'var(--success-color)';
+                }
+                localStorage.setItem('tasklyn_mode', isSelling ? 'selling' : 'buying');
+            }
+
+            if (modeBtn) {
+                modeBtn.addEventListener('click', () => {
+                    isSelling = !isSelling;
+                    updateMode();
+                });
+                updateMode();
+            }
+        });
+    </script>
+
+    <div class="container gigs-container">
+        <h1 class="section-title" style="text-align: left; margin-bottom: 1rem;">Available Gigs</h1>
+        <p style="color: var(--text-secondary); margin-bottom: 3rem;">Hire talented Web3 freelancers for your Scroll
+            projects.</p>
+
+        <div class="filters">
+            <input type="text" id="search-input" class="search-bar"
+                placeholder="Search gigs (e.g. Logo Design, Smart Contract)...">
+            <select id="category-filter" class="search-bar" style="flex: 0; min-width: 150px;">
+                <option value="All">All Categories</option>
+                <option value="Development">Development</option>
+                <option value="Design">Design</option>
+                <option value="Writing">Writing</option>
+                <option value="Marketing">Marketing</option>
+                <option value="DeFi">DeFi & Video</option>
+                <option value="Consulting">Consulting</option>
+            </select>
+        </div>
+
+        <div id="gigs-list" class="gigs-grid">
+            <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-secondary);">
+                <i class="fa-solid fa-circle-notch fa-spin"></i> Loading gigs...
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.1/ethers.umd.min.js"></script>
+    <script src="js/web3.js"></script>
+    <script src="js/store.js"></script>
+    <script>
+        function loadGigs() {
+            const container = document.getElementById('gigs-list');
+            const search = document.getElementById('search-input').value.toLowerCase();
+            const category = document.getElementById('category-filter').value;
+
+            // Load gigs from Store (Seeded automatically)
+            const allGigs = Store.getGigs();
+
+            const filtered = allGigs.filter(gig => {
+                const matchesSearch = gig.title.toLowerCase().includes(search);
+                const matchesCat = category === 'All' || (gig.category && gig.category.includes(category));
+                return matchesSearch && matchesCat;
+            });
+
+            if (filtered.length === 0) container.innerHTML = `<div style="grid-column: 1/-1; text-align: center;">No gigs found.</div>`;
+            else {
+                container.innerHTML = filtered.map(gig => `
+                    <div class="gig-card" onclick="window.location.href='gig-details.html?id=${gig.id}'" style="cursor: pointer;">
+                        <div class="gig-image">
+                           ${gig.image ? `<img src="${gig.image}" style="width:100%; height:100%; object-fit:cover;">` : '<i class="fa-solid fa-image fa-2x"></i>'}
+                        </div>
+                        <div class="gig-content">
+                            <div class="gig-user">
+                                <i class="fa-solid fa-circle-user"></i> ${gig.freelancer.substring(0, 6)}...
+                            </div>
+                            <h3 class="gig-title">${gig.title}</h3>
+                            <div class="gig-footer">
+                                <span class="gig-price">${gig.price}</span>
+                                <span style="font-size: 0.8rem; color: var(--text-secondary);"><i class="fa-solid fa-star" style="color: gold;"></i> 5.0</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+        document.getElementById('search-input').addEventListener('input', loadGigs);
+        document.getElementById('category-filter').addEventListener('change', loadGigs);
+        window.addEventListener('load', loadGigs);
+    </script>
+</body>
+
+</html>

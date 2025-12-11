@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Details | Tasklyn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .details-container {
+            padding: 8rem 0 4rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+        }
+
+        .section-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .bid-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .details-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="assets/task.png" alt="Tasklyn Logo" class="logo-img">
+            </a>
+
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <!-- Buying Mode -->
+                <a href="gigs.html" class="nav-link mode-buy">Find Talent</a>
+                <a href="create-job.html" class="nav-link mode-buy">Post Job</a>
+                <!-- Selling Mode -->
+                <a href="jobs.html" class="nav-link mode-sell" style="display:none">Find Work</a>
+                <a href="create-gig.html" class="nav-link mode-sell" style="display:none">Create Gig</a>
+
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+            </div>
+
+            <div class="nav-actions">
+                <button class="mode-switch" id="mode-btn">Switch to Selling</button>
+                <button id="connect-wallet">Connect Wallet</button>
+                <div class="nav-toggle" id="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Nav Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navToggle = document.getElementById('nav-toggle');
+            const navMenu = document.getElementById('nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navMenu.classList.toggle('show');
+                    navToggle.classList.toggle('active');
+                });
+            }
+            const modeBtn = document.getElementById('mode-btn');
+            const buyLinks = document.querySelectorAll('.mode-buy');
+            const sellLinks = document.querySelectorAll('.mode-sell');
+            let isSelling = localStorage.getItem('tasklyn_mode') === 'selling';
+            function updateMode() {
+                if (isSelling) {
+                    buyLinks.forEach(l => l.style.display = 'none');
+                    sellLinks.forEach(l => l.style.display = 'block');
+                    modeBtn.textContent = 'Switch to Buying';
+                    modeBtn.style.color = 'var(--primary)';
+                } else {
+                    buyLinks.forEach(l => l.style.display = 'block');
+                    sellLinks.forEach(l => l.style.display = 'none');
+                    modeBtn.textContent = 'Switch to Selling';
+                    modeBtn.style.color = 'var(--success-color)';
+                }
+                localStorage.setItem('tasklyn_mode', isSelling ? 'selling' : 'buying');
+            }
+            if (modeBtn) {
+                modeBtn.addEventListener('click', () => { isSelling = !isSelling; updateMode(); });
+                updateMode();
+            }
+        });
+    </script>
+
+    <div class="container details-container">
+        <!-- Main Content -->
+        <div class="main-column">
+            <div class="section-box">
+                <span class="feature-badge" id="job-status" style="margin-bottom: 1rem;">OPEN</span>
+                <h1 id="job-title" style="margin-bottom: 0.5rem;">Loading...</h1>
+                <div style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 0.9rem;">
+                    Posted by <span id="client-address">...</span> • <span id="job-date">...</span>
+                </div>
+                <h3>Description</h3>
+                <p id="job-desc"
+                    style="color: var(--text-secondary); line-height: 1.6; margin-top: 1rem; white-space: pre-wrap;">...
+                </p>
+                <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                    <strong>Attachments:</strong> <a href="#" style="color: var(--primary);">specs_v1.pdf</a> (Mock IPFS
+                    Link)
+                </div>
+            </div>
+
+            <div class="section-box">
+                <h3 style="margin-bottom: 1.5rem;">Proposals</h3>
+                <div id="bids-list">
+                    <p style="color: var(--text-secondary);">No bids yet.</p>
+                </div>
+                <!-- Freelancer Bid Form -->
+                <div id="bid-form-container"
+                    style="display: none; margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 2rem;">
+                    <h4>Place a Bid</h4>
+                    <form id="bid-form">
+                        <div class="form-group">
+                            <label>Bid Amount</label>
+                            <input type="text" id="bid-amount" placeholder="e.g. 1.2 ETH" required
+                                style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; background: #222; border: 1px solid #444; color: white; border-radius: 4px;">
+                        </div>
+                        <div class="form-group">
+                            <label>Proposal Message</label>
+                            <textarea id="bid-msg" rows="4" placeholder="Why are you the best fit?" required
+                                style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; background: #222; border: 1px solid #444; color: white; border-radius: 4px;"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Proposal</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="section-box">
+                <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Budget</div>
+                <div id="job-budget"
+                    style="font-size: 1.5rem; font-weight: 700; color: var(--success-color); margin-bottom: 1.5rem;">...
+                </div>
+                <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Deadline</div>
+                <div id="job-deadline" style="margin-bottom: 1.5rem; font-weight: 600;">...</div>
+                <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Payment Verified
+                </div>
+                <div style="color: var(--primary);"><i class="fa-solid fa-circle-check"></i> Scroll Escrow</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.1/ethers.umd.min.js"></script>
+    <script src="js/web3.js"></script>
+    <script src="js/store.js"></script>
+    <script>
+        const MOCK_JOBS = [{ id: '1', title: "Smart Contract Audit", description: "Audit DeFi strategy", reward: "2.5 ETH", client: "0x123...Mock", bids: [] }];
+        window.addEventListener('load', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const jobId = urlParams.get('id');
+            const account = localStorage.getItem('connectedAccount');
+
+            let job = Store.getJobById(jobId);
+            if (!job) {
+                job = MOCK_JOBS.find(j => j.id == jobId) || { id: jobId, title: "Mock Job Details", description: "This is a mock job description.", reward: "1.0 ETH", client: "0xMockClient", bids: [], status: "OPEN" };
+            }
+
+            document.getElementById('job-title').textContent = job.title;
+            document.getElementById('job-desc').textContent = job.description;
+            document.getElementById('job-budget').textContent = job.reward || job.budget;
+            document.getElementById('client-address').textContent = job.client;
+            document.getElementById('job-status').textContent = job.status || 'OPEN';
+            document.getElementById('job-deadline').textContent = job.deadline || 'No deadline';
+
+            const isClient = account && (job.client === account);
+            const bidsContainer = document.getElementById('bids-list');
+            if (job.bids && job.bids.length > 0) {
+                bidsContainer.innerHTML = job.bids.map(bid => `
+                    <div class="bid-card">
+                        <div>
+                            <strong>${bid.freelancer.substring(0, 6)}...</strong> - ${bid.amount}
+                            <p style="font-size: 0.85rem; color: #aaa; margin-top: 0.2rem;">"${bid.msg || 'No message'}"</p>
+                        </div>
+                        ${isClient && job.status === 'OPEN' ? `<button class="btn btn-outline" onclick="acceptBid('${job.id}', '${bid.id}')">Accept</button>` : `<span class="feature-badge">${bid.status || 'Pending'}</span>`}
+                    </div>
+                `).join('');
+            }
+
+            if (!isClient && (!job.status || job.status === 'OPEN')) { document.getElementById('bid-form-container').style.display = 'block'; }
+
+            document.getElementById('bid-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!account) return alert('Connect wallet');
+
+                try {
+                    const amount = document.getElementById('bid-amount').value;
+                    const msg = document.getElementById('bid-msg').value;
+
+                    // Signature
+                    await window.ethereum.request({
+                        method: 'personal_sign',
+                        params: [`Place Bid: ${amount}\nJob ID: ${job.id}`, account]
+                    });
+
+                    Store.placeBid(job.id, { amount, msg });
+                    alert('Bid Transaction Confirmed!');
+                    window.location.reload();
+                } catch (err) {
+                    alert("Transaction Rejected");
+                }
+            });
+        });
+
+        window.acceptBid = async (jobId, bidId) => {
+            const account = localStorage.getItem('connectedAccount');
+            if (confirm('Accept this bid? Checks will be locked in Escrow.')) {
+                try {
+                    await window.ethereum.request({
+                        method: 'personal_sign',
+                        params: [`Accept Bid & Lock Funds\nJob: ${jobId}\nBid: ${bidId}`, account] // Use 'account' from closure or get it
+                    });
+                    Store.acceptBid(jobId, bidId);
+                    alert('Bid Accepted! Funds Locked in Escrow.');
+                    window.location.reload();
+                } catch (err) {
+                    alert("Transaction Cancelled");
+                }
+            }
+        };
+    </script>
+</body>
+
+</html>

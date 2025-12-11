@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a Gig | Tasklyn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .form-container {
+            max-width: 700px;
+            margin: 8rem auto 4rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Auth Guard -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const account = localStorage.getItem('connectedAccount');
+            if (!account) {
+                alert("Please login with your wallet to create a gig.");
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="assets/task.png" alt="Tasklyn Logo" class="logo-img">
+            </a>
+
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <!-- Buying Mode -->
+                <a href="gigs.html" class="nav-link mode-buy">Find Talent</a>
+                <a href="create-job.html" class="nav-link mode-buy">Post Job</a>
+                <!-- Selling Mode -->
+                <a href="jobs.html" class="nav-link mode-sell" style="display:none">Find Work</a>
+                <a href="create-gig.html" class="nav-link mode-sell active-link" style="display:none">Create Gig</a>
+
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+            </div>
+
+            <div class="nav-actions">
+                <button class="mode-switch" id="mode-btn">Switch to Selling</button>
+                <button id="connect-wallet">Connect Wallet</button>
+                <div class="nav-toggle" id="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Nav Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navToggle = document.getElementById('nav-toggle');
+            const navMenu = document.getElementById('nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navMenu.classList.toggle('show');
+                    navToggle.classList.toggle('active');
+                });
+            }
+            const modeBtn = document.getElementById('mode-btn');
+            const buyLinks = document.querySelectorAll('.mode-buy');
+            const sellLinks = document.querySelectorAll('.mode-sell');
+            let isSelling = localStorage.getItem('tasklyn_mode') === 'selling';
+            function updateMode() {
+                if (isSelling) {
+                    buyLinks.forEach(l => l.style.display = 'none');
+                    sellLinks.forEach(l => l.style.display = 'block');
+                    modeBtn.textContent = 'Switch to Buying';
+                    modeBtn.style.color = 'var(--primary)';
+                } else {
+                    buyLinks.forEach(l => l.style.display = 'block');
+                    sellLinks.forEach(l => l.style.display = 'none');
+                    modeBtn.textContent = 'Switch to Selling';
+                    modeBtn.style.color = 'var(--success-color)';
+                }
+                localStorage.setItem('tasklyn_mode', isSelling ? 'selling' : 'buying');
+            }
+            if (modeBtn) {
+                modeBtn.addEventListener('click', () => { isSelling = !isSelling; updateMode(); });
+                updateMode();
+            }
+        });
+    </script>
+
+    <div class="container form-container glass-panel">
+        <h1 style="margin-bottom: 2rem; text-align: center;">Create a New Gig</h1>
+
+        <form id="create-gig-form">
+            <div class="form-group">
+                <label>Gig Title (starts with "I will...")</label>
+                <input type="text" id="title" placeholder="I will build a React frontend..." required>
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select id="category">
+                    <option>Development</option>
+                    <option>Design</option>
+                    <option>Writing</option>
+                    <option>Video</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Price (ETH/USDC)</label>
+                <input type="text" id="price" placeholder="e.g. 0.5 ETH" required>
+            </div>
+            <div class="form-group">
+                <label>Delivery Time (Days)</label>
+                <input type="number" id="delivery" placeholder="3" required>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="desc" rows="5" placeholder="Describe what you offer..." required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Gig Image</label>
+                <div style="border: 1px dashed #555; padding: 1rem; text-align: center; color: #888;">
+                    <i class="fa-solid fa-image"></i> Click to Upload (Simulated)
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Publish Gig</button>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.1/ethers.umd.min.js"></script>
+    <script src="js/web3.js"></script>
+    <script src="js/store.js"></script>
+    <script>
+        document.getElementById('create-gig-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!localStorage.getItem('connectedAccount')) return alert('Connect wallet');
+            const gigData = {
+                title: document.getElementById('title').value,
+                category: document.getElementById('category').value,
+                price: document.getElementById('price').value,
+                description: document.getElementById('desc').value,
+                image: null
+            };
+            Store.createGig(gigData);
+            alert('Gig Created Successfully on Scroll!');
+            window.location.href = 'gigs.html';
+        });
+    </script>
+</body>
+
+</html>
