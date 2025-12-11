@@ -287,6 +287,45 @@
     width: 100%;
 }
 
+@media (max-width: 768px) {
+    .hero {
+        padding-top: 100px;
+        min-height: auto;
+        padding-bottom: 4rem;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+
+    .hero-stats {
+        flex-direction: column;
+        gap: 2rem;
+        width: 100%;
+    }
+
+    .stat-item {
+        width: 100%;
+        padding: 1rem;
+        border-radius: 12px;
+    }
+
+    .hero-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 1rem;
+    }
+
+    .hero-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
 
 /* =========================================
    3. FEATURES SECTION (Legacy Restore)
