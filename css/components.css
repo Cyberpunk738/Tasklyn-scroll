@@ -314,6 +314,10 @@
         border-radius: 12px;
     }
 
+    #connect-wallet{
+        display: none;
+    }
+
     .hero-actions {
         flex-direction: column;
         width: 100%;
