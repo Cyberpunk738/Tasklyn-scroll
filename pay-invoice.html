@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay Invoice | Tasklyn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo"><img src="assets/task.png" alt="Logo" class="logo-img"></a>
+        </div>
+    </nav>
+
+    <div class="container" style="max-width: 500px; margin-top: 8rem;">
+        <div class="glass-panel" style="padding: 3rem; text-align: center;">
+            <div id="loading">Loading Invoice...</div>
+
+            <div id="invoice-content" style="display: none;">
+                <div style="margin-bottom: 2rem;">
+                    <span class="feature-badge" id="status-badge">PENDING</span>
+                </div>
+
+                <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">
+                    <span id="amount">0.00</span> <span id="currency"
+                        style="font-size: 1.5rem; color: var(--text-muted);">ETH</span>
+                </h1>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem;">Due to <span id="creator"
+                        style="color: white; font-family: monospace;">0x...</span></p>
+
+                <div
+                    style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; text-align: left;">
+                    <label
+                        style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);">For
+                        Service</label>
+                    <p id="description" style="font-size: 1.1rem; margin-top: 0.5rem; font-weight: 500;">...</p>
+                </div>
+
+                <div id="action-area">
+                    <button id="pay-btn" class="btn btn-primary btn-large"
+                        style="width: 100%; justify-content: center;">
+                        <i class="fa-brands fa-ethereum"></i> Pay on Scroll
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.1/ethers.umd.min.js"></script>
+    <script src="js/web3.js"></script>
+    <script src="js/store.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            const invoice = Store.getInvoice(id);
+
+            if (!invoice) {
+                document.getElementById('loading').textContent = "Invoice Not Found";
+                return;
+            }
+
+            // Populate Data
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('invoice-content').style.display = 'block';
+
+            document.getElementById('amount').textContent = invoice.amount;
+            document.getElementById('currency').textContent = invoice.currency;
+            document.getElementById('description').textContent = invoice.description;
+            document.getElementById('creator').textContent = invoice.creator.substring(0, 6) + '...' + invoice.creator.substring(38);
+            document.getElementById('status-badge').textContent = invoice.status;
+
+            const btn = document.getElementById('pay-btn');
+
+            if (invoice.status === 'PAID') {
+                btn.disabled = true;
+                btn.textContent = 'Allocated & Paid';
+                btn.className = 'btn btn-outline';
+                document.getElementById('status-badge').style.background = 'var(--success-color)';
+            } else {
+                btn.addEventListener('click', async () => {
+                    if (typeof window.ethereum === 'undefined') return alert("Please install Metamask");
+
+                    try {
+                        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                        const payer = accounts[0];
+
+                        btn.textContent = 'Processing Payment...';
+
+                        // Simulate Payment Transaction
+                        await window.ethereum.request({
+                            method: 'personal_sign',
+                            params: [`Pay Invoice #${invoice.id}\nAmount: ${invoice.amount} ${invoice.currency}\nTo: ${invoice.creator}`, payer]
+                        });
+
+                        Store.payInvoice(invoice.id, '0xMockTxHash');
+
+                        alert("Payment Successful!");
+
+                        // Update to Receipt View
+                        document.getElementById('action-area').innerHTML = `
+                             <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-secondary);">
+                                <div style="color: var(--success-color); margin-bottom: 1rem; font-weight: 600;"><i class="fa-solid fa-circle-check"></i> Payment Confirmed</div>
+                                <button class="btn btn-outline" style="width: 100%; justify-content: center;" onclick="window.print()">
+                                    <i class="fa-solid fa-receipt"></i> Download Receipt
+                                </button>
+                             </div>
+                        `;
+
+                        document.getElementById('status-badge').textContent = "PAID";
+                        document.getElementById('status-badge').style.background = 'var(--success-color)';
+
+                    } catch (err) {
+                        console.error(err);
+                        alert("Payment Cancelled");
+                        btn.textContent = 'Pay on Scroll';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

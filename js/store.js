@@ -165,6 +165,36 @@ const Store = {
         }
     },
 
+    // --- INVOICES (New Feature) ---
+    createInvoice: (invoiceData) => {
+        const invoices = JSON.parse(localStorage.getItem('tasklyn_invoices') || '[]');
+        const newInvoice = {
+            id: Store.generateId(),
+            ...invoiceData,
+            status: 'PENDING',
+            createdAt: new Date().toISOString()
+        };
+        invoices.push(newInvoice);
+        localStorage.setItem('tasklyn_invoices', JSON.stringify(invoices));
+        return newInvoice;
+    },
+
+    getInvoice: (id) => {
+        const invoices = JSON.parse(localStorage.getItem('tasklyn_invoices') || '[]');
+        return invoices.find(i => i.id === id);
+    },
+
+    payInvoice: (id, txHash) => {
+        const invoices = JSON.parse(localStorage.getItem('tasklyn_invoices') || '[]');
+        const index = invoices.findIndex(i => i.id === id);
+        if (index !== -1) {
+            invoices[index].status = 'PAID';
+            invoices[index].txHash = txHash;
+            invoices[index].paidAt = new Date().toISOString();
+            localStorage.setItem('tasklyn_invoices', JSON.stringify(invoices));
+        }
+    },
+
     // --- SEED DATA ---
     // --- SEED DATA ---
     seedGigs: () => {
