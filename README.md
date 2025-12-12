@@ -3,7 +3,7 @@
 > **DeFi-Powered Freelance Marketplace built for the Scroll Hackathon 2025.**
 > Zero Middlemen. 100% On-Chain Trust. Instant Payments.
 
-![Tasklyn Banner](/assets/task.png)
+![Tasklyn Banner](src/assets/task.png)
 
 ## 💡 The Vision
 
