@@ -14,18 +14,31 @@ const PayInvoice = () => {
     const [processing, setProcessing] = useState(false);
 
     useEffect(() => {
-        if (invoices.length > 0) {
-            const foundInvoice = invoices.find(inv => inv.id === id);
-            setInvoice(foundInvoice);
+        const fetchInvoice = () => {
+            // Check for encoded data in URL
+            if (id === 'shared') {
+                const searchParams = new URLSearchParams(window.location.search);
+                const encodedData = searchParams.get('data');
+                if (encodedData) {
+                    try {
+                        // Decode safe base64 string
+                        const decoded = JSON.parse(decodeURIComponent(atob(encodedData)));
+                        setInvoice(decoded);
+                    } catch (e) {
+                        console.error("Failed to decode invoice", e);
+                    }
+                }
+            } else {
+                // Try from Store (Local)
+                if (invoices.length > 0) {
+                    const foundInvoice = invoices.find(inv => inv.id === id);
+                    if (foundInvoice) setInvoice(foundInvoice);
+                }
+            }
             setLoading(false);
-        } else {
-            // If invoices empty, might be initialization, or actually empty.
-            // Since it's localStorage sync, it should be fine. 
-            // But if refreshing on this page, StoreContext initializes from localstorage.
-            const foundInvoice = invoices.find(inv => inv.id === id);
-            setInvoice(foundInvoice);
-            setLoading(false);
-        }
+        };
+
+        fetchInvoice();
     }, [id, invoices]);
 
     const handlePayment = async () => {
@@ -47,10 +60,21 @@ const PayInvoice = () => {
                 params: [`Pay Invoice #${invoice.id}\nAmount: ${invoice.amount} ${invoice.currency}\nTo: ${invoice.creator}`, payer]
             });
 
-            payInvoice(invoice.id, '0xMockTxHash');
+            // Update local status if possible
+            if (id !== 'shared') {
+                payInvoice(invoice.id, '0xMockTxHash');
+            } else {
+                // For shared invoices, we just update local state to show success
+                setInvoice(prev => ({
+                    ...prev,
+                    status: 'PAID',
+                    txHash: '0xMockTxHashShared' + Math.floor(Math.random() * 10000),
+                    paidAt: new Date().toISOString()
+                }));
+            }
 
             setProcessing(false);
-            alert("Payment Successful!");
+            alert("Payment Successful on Scroll Sepolia!");
 
         } catch (err) {
             console.error(err);

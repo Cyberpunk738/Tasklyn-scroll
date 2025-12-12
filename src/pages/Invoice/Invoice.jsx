@@ -41,8 +41,15 @@ const Invoice = () => {
         setCreatedInvoice(invoice);
     };
 
+    const getShareableLink = () => {
+        if (!createdInvoice) return '';
+        // Use encodeURIComponent before btoa to handle Unicode characters (emojis) safely
+        const data = btoa(encodeURIComponent(JSON.stringify(createdInvoice)));
+        return `${window.location.origin}/pay/shared?data=${data}`;
+    };
+
     const copyLink = () => {
-        const link = `${window.location.origin}/pay/${createdInvoice.id}`;
+        const link = getShareableLink();
         navigator.clipboard.writeText(link);
         alert("Link copied to clipboard!");
     };
@@ -168,7 +175,7 @@ const Invoice = () => {
                             </p>
 
                             <div className="share-link-box">
-                                {`${window.location.origin}/pay/${createdInvoice.id}`}
+                                {getShareableLink()}
                             </div>
 
                             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginBottom: '1rem' }}>
@@ -272,7 +279,7 @@ const Invoice = () => {
                             <p>Scan to Pay via Scroll Network:</p>
                             <div style={{ display: 'inline-block', padding: '10px', border: '1px solid #ccc' }}>
                                 <QRCodeCanvas
-                                    value={`${window.location.origin}/pay/${createdInvoice.id}`}
+                                    value={getShareableLink()}
                                     size={128}
                                 />
                             </div>
