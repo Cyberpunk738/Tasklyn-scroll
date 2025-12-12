@@ -1,0 +1,106 @@
+/* PayInvoice.css */
+.pay-invoice-container {
+    max-width: 500px;
+    margin: 8rem auto 0;
+    padding: 0 1rem;
+}
+
+.invoice-loading {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-muted);
+}
+
+.invoice-details-box {
+    margin-bottom: 2rem;
+}
+
+.invoice-amount-header {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.invoice-currency {
+    font-size: 1.5rem;
+    color: var(--text-muted);
+}
+
+.invoice-creator {
+    color: white;
+    font-family: monospace;
+}
+
+.invoice-description-box {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    text-align: left;
+    border: 1px solid var(--border-secondary);
+}
+
+.invoice-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.invoice-description {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.payment-success-area {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-secondary);
+}
+
+.success-message {
+    color: var(--success-color);
+    margin-bottom: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+#printable-receipt {
+    display: none;
+}
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    #printable-receipt,
+    #printable-receipt * {
+        visibility: visible;
+    }
+
+    #printable-receipt {
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white;
+        color: black;
+        padding: 2rem;
+        z-index: 9999;
+    }
+
+    .receipt-box {
+        border: 2px solid #000;
+        padding: 2rem;
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+    }
+}

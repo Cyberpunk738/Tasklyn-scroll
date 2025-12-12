@@ -1,0 +1,76 @@
+/* How It Works Styles */
+.how-it-works {
+    background: var(--bg-primary);
+    padding: 8rem 0;
+}
+
+.workflow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 4rem;
+}
+
+.workflow-step {
+    text-align: center;
+    max-width: 200px;
+}
+
+.step-number {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.step-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--primary);
+}
+
+.workflow-step h3 {
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.workflow-step p {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.workflow-arrow {
+    color: var(--primary);
+    font-size: 1.5rem;
+    opacity: 0.5;
+}
+
+@media (max-width: 768px) {
+    .workflow-arrow {
+        display: none;
+    }
+
+    .workflow-step {
+        max-width: 100%;
+        margin-bottom: 2rem;
+    }
+}

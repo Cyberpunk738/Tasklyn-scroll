@@ -1,0 +1,148 @@
+/* Navbar Styles */
+:root {
+    --nav-height: 80px;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-secondary);
+    height: var(--nav-height);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1.5rem;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.nav-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+    text-transform: capitalize;
+}
+
+.nav-link:hover,
+.nav-link.active,
+.nav-link.active-link {
+    color: white;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.mode-switch {
+    font-size: 0.9rem;
+    color: var(--success-color);
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-weight: 600;
+    padding: 0;
+    transition: all 0.2s;
+}
+
+.mode-switch:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+}
+
+.logo-img {
+    height: 48px;
+    width: auto;
+}
+
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    cursor: pointer;
+    z-index: 1002;
+}
+
+.bar {
+    width: 24px;
+    height: 2px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 2px;
+}
+
+.connect-wallet-btn {
+    background: white;
+    color: black;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+    display: inline-block;
+}
+
+.connect-wallet-btn:hover {
+    background: #e0e0e0;
+}
+
+@media (max-width: 1024px) {
+    .nav-menu {
+        position: fixed;
+        top: var(--nav-height);
+        left: 0;
+        width: 100%;
+        background: #0f0f0f;
+        flex-direction: column;
+        padding: 2rem;
+        border-bottom: 1px solid var(--border-secondary);
+        transform: translateY(-150%);
+        transition: transform 0.3s ease;
+        gap: 1.5rem;
+        align-items: flex-start;
+        z-index: 1001;
+    }
+
+    .nav-menu.show {
+        transform: translateY(0);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .nav-toggle {
+        display: flex;
+    }
+
+    .mode-switch {
+        display: none;
+    }
+}
