@@ -79,20 +79,30 @@ export const Web3Provider = ({ children }) => {
     const connectWallet = async () => {
         if (typeof window.ethereum !== 'undefined') {
             try {
-                await switchToScrollSepolia();
+                // Attempt to switch chain, but don't block connection if it fails (user can switch manually)
+                try {
+                    await switchToScrollSepolia();
+                } catch (chainError) {
+                    console.error("Chain switch failed:", chainError);
+                }
+
                 const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                 const newAccount = accounts[0];
                 setAccount(newAccount);
                 localStorage.setItem('connectedAccount', newAccount);
                 return newAccount;
             } catch (error) {
-                console.error(error);
-                alert('Failed to connect wallet.');
-                throw error;
+                console.error("Wallet connection error details:", error);
+                // Safe check for error message to avoid [object Object] alert
+                const errMsg = error.message || JSON.stringify(error) || "Unknown error";
+                alert(`Failed to connect wallet: ${errMsg}`);
+                // Don't re-throw to avoid "Uncaught (in promise)" if caller doesn't catch
+                return null;
             }
         } else {
             alert('Please install MetaMask!');
             window.open('https://metamask.io/download.html', '_blank');
+            return null;
         }
     };
 

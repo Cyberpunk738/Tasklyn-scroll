@@ -16,8 +16,8 @@ const Signup = () => {
 
     const handleWalletSignup = async () => {
         try {
-            await connectWallet();
-            navigate('/dashboard');
+            const account = await connectWallet();
+            if (account) navigate('/dashboard');
         } catch (error) {
             console.error("Signup failed", error);
         }
