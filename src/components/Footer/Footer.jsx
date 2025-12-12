@@ -16,7 +16,7 @@ const Footer = () => {
                         <div className="social-links">
                             <a href="#" className="social-link" aria-label="Twitter"><i className="fa-brands fa-twitter"></i></a>
                             <a href="#" className="social-link" aria-label="Discord"><i className="fa-brands fa-discord"></i></a>
-                            <a href="#" className="social-link" aria-label="GitHub"><i className="fa-brands fa-github"></i></a>
+                            <a href="https://github.com/Cyberpunk738/Tasklyn-scroll.git" className="social-link" aria-label="GitHub"><i className="fa-brands fa-github"></i></a>
                             <a href="#" className="social-link" aria-label="Telegram"><i className="fa-brands fa-telegram"></i></a>
                         </div>
                     </div>

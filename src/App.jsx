@@ -12,6 +12,7 @@ import GigDetails from './pages/GigDetails/GigDetails';
 import JobDetails from './pages/JobDetails/JobDetails';
 import Invoice from './pages/Invoice/Invoice';
 import PayInvoice from './pages/PayInvoice/PayInvoice';
+import Docs from './pages/Docs/Docs';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/pay/:id" element={<PayInvoice />} />
         <Route path="/gig/:id" element={<GigDetails />} />
         <Route path="/job/:id" element={<JobDetails />} />
+        <Route path="/docs" element={<Docs />} />
         {/* Helper route to catch all for now, to ensure Home renders */}
         <Route path="*" element={<Home />} />
       </Routes>

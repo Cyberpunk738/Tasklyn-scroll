@@ -58,6 +58,7 @@ const Navbar = () => {
                     )}
 
                     <Link to="/dashboard" className="nav-link" onClick={() => setIsOpen(false)}>Dashboard</Link>
+                    <Link to="/docs" className="nav-link" onClick={() => setIsOpen(false)}>Docs</Link>
                 </div>
 
                 <div className="nav-actions">
